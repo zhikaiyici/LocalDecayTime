@@ -144,6 +144,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //get time
   //   
   G4double time = track->GetGlobalTime();
+  G4cout << "##### Global decay time: " << G4BestUnit(time, "Time") << G4endl;
+  G4double decayTime = track->GetLocalTime();
+  G4cout << "##### Local decay time: " << G4BestUnit(decayTime, "Time") << G4endl;
+
   G4int ID = track->GetTrackID();
   if (ID == 1) run->PrimaryTiming(time);        //time of life of primary ion
   fTimeEnd = time;

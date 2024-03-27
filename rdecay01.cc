@@ -45,6 +45,8 @@
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
+#include "G4OpticalPhysics.hh"
+#include "QGSP_BERT_HP.hh"
 
 int main(int argc,char** argv) {
 
@@ -66,7 +68,12 @@ int main(int argc,char** argv) {
   //set mandatory initialization classes
   //
   runManager->SetUserInitialization(new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList);
+
+  auto physicsList = new QGSP_BERT_HP;
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager->SetUserInitialization(physicsList);
+  //runManager->SetUserInitialization(new PhysicsList);
 
   runManager->SetUserInitialization(new ActionInitialization);
 
@@ -83,6 +90,8 @@ int main(int argc,char** argv) {
     //interactive mode
     visManager = new G4VisExecutive;
     visManager->Initialize();
+    UImanager->ApplyCommand("/tracking/verbose 2");
+    UImanager->ApplyCommand("/event/verbose 2");
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
